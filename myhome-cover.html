@@ -1,0 +1,41 @@
+<script type="text/javascript">
+  RED.nodes.registerType('myhome-cover',{
+    category: 'Bticino MyHome',
+    color: '#a6bbcf',
+    defaults: {
+      coverid: { value: '', required: true, validate: RED.validators.number() },
+      topic: { value: '', required: true},
+      gateway: { type: 'myhome-gateway', required: true },
+      name: { value: '', required: true }
+    },
+    inputs:1,
+    outputs:1,
+    icon: 'sort.png',
+    label: function() {
+      return this.name || 'myhome-cover';
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="myhome-cover">
+  <div class="form-row">
+      <label for="node-input-coverid"><i class="fa fa-sort"></i> Cover</label>
+      <input type="text" id="node-input-coverid" placeholder="32" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-topic-o"></i> Topic</label>
+      <input type="text" id="node-input-topic" placeholder="e.g. homeautomation/covers/office/door" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-gateway"><i class="fa fa-server"></i> Gateway</label>
+      <input type="text" id="node-input-gateway">
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Cover name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="myhome-cover">
+  <p>A simple node that converts the message payloads into all lower-case characters</p>
+</script>

@@ -1,0 +1,44 @@
+<script type="text/javascript">
+  RED.nodes.registerType('myhome-eventsession',{
+    category: 'Bticino MyHome',
+    color: '#a6bbcf',
+    defaults: {
+      system: { value:"0", required: false },
+      timeout: { value:"300", required: false },
+      gateway: { type: 'myhome-gateway', required: true },
+      name: { value:"", required: true }
+    },
+    outputs:1,
+    icon: "serial.png",
+    label: function() {
+      return this.name||"myhome-eventsession";
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="myhome-eventsession">
+    <div class="form-row">
+        <label for="node-input-system"><i class="fa fa-system-o"></i> System</label>
+        <select id="node-input-system">
+          <option value="0">No filtering</option>
+          <option value="1">Lighting</option>
+          <option value="2">Automation</<option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-timeout"><i class="fa fa-server"></i> Timeout</label>
+        <input type="text" id="node-input-timeout">
+    </div>
+    <div class="form-row">
+        <label for="node-input-gateway"><i class="fa fa-server"></i> Gateway</label>
+        <input type="text" id="node-input-gateway">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="event session identifier">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="myhome-eventsession">
+  <p>A simple node that converts the message payloads into all lower-case characters</p>
+</script>

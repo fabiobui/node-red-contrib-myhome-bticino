@@ -1,0 +1,41 @@
+<script type="text/javascript">
+  RED.nodes.registerType('myhome-light',{
+    category: 'Bticino MyHome',
+    color: '#a6bbcf',
+    defaults: {
+      lightid: { value: '', required: true, validate: RED.validators.number() },
+      topic: { value: '', required: true},
+      gateway: { type: 'myhome-gateway', required: true },
+      name: { value: '', required: true }
+    },
+    inputs:1,
+    outputs:1,
+    icon: 'light.png',
+    label: function() {
+      return this.name || 'myhome-light';
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="myhome-light">
+  <div class="form-row">
+      <label for="node-input-lightid"><i class="fa fa-lightbulb-o"></i> Light</label>
+      <input type="text" id="node-input-lightid" placeholder="32" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-topic-o"></i> Topic</label>
+      <input type="text" id="node-input-topic" placeholder="e.g. homeautomation/lights/office/main/on" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-gateway"><i class="fa fa-server"></i> Gateway</label>
+      <input type="text" id="node-input-gateway">
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Light name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="myhome-light">
+  <p>A simple node that converts the message payloads into all lower-case characters</p>
+</script>

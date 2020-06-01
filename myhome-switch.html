@@ -1,0 +1,52 @@
+<script type="text/javascript">
+  RED.nodes.registerType('myhome-switch',{
+    category: 'Bticino MyHome',
+    color: '#a6bbcf',
+    defaults: {
+      switchid: { value: '', required: true, validate: RED.validators.number() },
+      topic: { value: '', required: true},
+      gateway: { type: 'myhome-gateway', required: true },
+      name: { value: '', required: true }
+    },
+    inputs:1,
+    outputs:2,
+    outputLabels: function(index) {
+            if (index === 0) {
+                return 'payload'
+            }
+
+            if (index === 1) {
+                return 'payload.On'
+            }
+
+            return ''
+    },    
+    icon: 'switch.png',
+    label: function() {
+      return this.name || 'myhome-switch';
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="myhome-switch">
+  <div class="form-row">
+      <label for="node-input-switchid"><i class="fa fa-bolt"></i> Switch</label>
+      <input type="text" id="node-input-switchid" placeholder="32" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-topic-o"></i> Topic</label>
+      <input type="text" id="node-input-topic" placeholder="e.g. homeautomation/sockets/office/outdoor" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-gateway"><i class="fa fa-server"></i> Gateway</label>
+      <input type="text" id="node-input-gateway">
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Switch name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="myhome-switch">
+  <p>A simple node that converts the message payloads into all lower-case characters</p>
+</script>

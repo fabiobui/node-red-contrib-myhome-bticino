@@ -1,0 +1,43 @@
+<script type="text/javascript">
+  RED.nodes.registerType('myhome-gateway',{
+    category: 'config',
+    color: '#a6bbcf',
+    defaults: {
+      name: { value: "F-454", required: true },
+      host: { value: "192.168.1.16", required: true },
+      port: { value: "20000", required: true },
+      pass: { value: "12345", required: false },
+      timeout: { value: "60", required: false, validate: function(v){return (parseInt(v) == 0) || (parseInt(v) > 14)}}
+    },
+    label: function() {
+      return this.name
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="myhome-gateway">
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="icon-bookmark"></i> Name</label>
+    <input type="text" id="node-config-input-name">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-host"><i class="fa fa-server"></i> IP address</label>
+    <input type="text" id="node-config-input-host">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-port"><i class="fa fa-server"></i> Port</label>
+    <input type="text" id="node-config-input-port" placeholder="20000">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-pass"><i class="fa fa-server"></i> Password</label>
+    <input type="text" id="node-config-input-pass" placeholder="12345">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-timeout"><i class="icon-bookmark"></i> Timeout</label>
+    <input type="text" id="node-config-input-timeout" placeholder="Interval in seconds between time requests to identified stalled connetions (>15)">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="myhome-gateway">
+  <p>A simple node that converts the message payloads into all lower-case characters</p>
+</script>
