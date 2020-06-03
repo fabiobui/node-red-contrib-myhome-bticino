@@ -18,7 +18,7 @@ module.exports = function(RED) {
     node.on('input', function(msg) {
 	  var command = msg.payload	
 		
-      mhutils.execute_command_new(command, RED.nodes.getNode(config.gateway),
+      mhutils.execute_command(true, command, RED.nodes.getNode(config.gateway),
         function(data) {
           // updating node state
           node.send({payload: command, topic: 'state/' + config.topic})

@@ -40,7 +40,7 @@ module.exports = function(RED) {
 
       if (msg.topic === 'cmd/' + config.topic) {
         var command = '*1*' + (payload == 'ON' ? 1 : 0) + '*' + config.switchid + '##'
-        mhutils.execute_command_new(command, RED.nodes.getNode(config.gateway),
+        mhutils.execute_command(true, command, RED.nodes.getNode(config.gateway),
         function(data) {
           // updating node state
           payload == 'ON' ? node.status({fill: 'yellow', shape: 'dot', text: 'On'}) : node.status({fill: 'grey', shape: 'dot', text: 'Off'})

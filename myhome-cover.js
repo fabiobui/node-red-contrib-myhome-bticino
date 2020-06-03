@@ -46,7 +46,7 @@ module.exports = function(RED) {
         } else if(msg.payload == "STOP") {
           command = '*2*0*' + config.coverid + '##'
         }
-        mhutils.execute_command(command, RED.nodes.getNode(config.gateway),
+        mhutils.execute_command(true, command, RED.nodes.getNode(config.gateway),
         function(data) {
           // updating node state
           // node.status({fill: 'yellow', shape: 'dot', text: msg.payload})

@@ -37,5 +37,16 @@
 </script>
 
 <script type="text/x-red" data-help-name="myhome-cover">
-  <p>A simple node that converts the message payloads into all lower-case characters</p>
+<p>Adds Cover Node to your flow.</p>
+<ul>
+<li><strong>Cover</strong> is the number of the cover in MyHome system</li>
+<li><strong>Topic</strong>&nbsp;is used to activate the flow when the input <code>msg.topic</code>&nbsp;is set to 'cmd/topic'</li>
+<li><strong>Gateway</strong> is the gateway to be configured in order to connect to MyHome system</li>
+<li><strong>Name</strong> (mandatory) is the name of the node&nbsp;</li>
+</ul>
+<h3>Inputs</h3>
+<p><code>msg.payload</code>&nbsp; is a string value with 'OPEN' or 'CLOSE' or 'STOP'</p>
+<p><code>msg.topic</code>&nbsp;is set to 'cmd/topic' where topic is the Topic of the node.</p>
+<h3>Ouput</h3>
+<p>The <strong>default output</strong> is a string <code>msg.payload</code> with 'OPEN' , 'CLOSE', 'STOP' value.</p>
 </script>

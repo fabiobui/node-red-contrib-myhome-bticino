@@ -106,7 +106,8 @@ module.exports = function(RED) {
                 state = 'monitoring'
                 node.log('connected to gateway: ' + node.host)
                 node.status({fill:"green",shape:"dot",text:"connected"})
-                mhutils.execute_command('*#1*0##', node,
+                // it was '*#1*0##' but it's too heavy
+                mhutils.execute_command(true, '*99*1##', node,
                         function(data) {
                           node.log('Updated states')
                         }, function(data) {
@@ -139,9 +140,9 @@ module.exports = function(RED) {
 
     function check_connection() {
       node.log("checking connection")
-      mhutils.execute_command('*#13**0##', node,
+      mhutils.execute_command(true, '*#13**0##', node,
               function(data) {
-                node.log({payload: {'state': 'up'}, topic: config.topic})
+                node.log('connected to gateway')
                 if (state == 'disconnected')
                   instanciateClient()
               }, function(data) {
