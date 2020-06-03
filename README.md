@@ -10,18 +10,19 @@ Based on unpublished (into NPM repository, but it's on GitHub) work of Ralph Vig
 ## Nodes that are now working
 - **Switches**
 	-- ON/OFF
+- Covers
+	-- UP/DOWN/STOP
 - **Event Session**
 	-- Listen for any message on the bus and sends it as payload
 - **Command Session**
 	-- Send arbitray message provided in payload to bus. E.g. **\*1\*1\*16\#\#** to turn on light **16**
 
-## Nodes under developing (not tested)
+## Node not tested but probably it works (test it!)
 
 - Lights
 	-- ON/OFF
   * Dimming (providing a fixed percentage)
-- Covers
-	-- UP/DOWN/STOP
+
 
 ## Improvement and changes from original sources
 - Gateway's password management that is usually set to **12345**
@@ -57,7 +58,8 @@ After that you have to change the IP address in the Gateway configuration and of
 
 ### Usage of Switch Node
 
-... to be continued ...
+Put Switch node on your flow and set the switch number inside it. Configure your Gateway if not configured yet.
+Test the Switch injecting payload string message 'ON' (or 'OFF') and setting Topic property as 'cmd/topic' where topic is the Switch Topic.
 
 ### Tips
 
