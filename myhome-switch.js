@@ -20,7 +20,9 @@ module.exports = function(RED) {
           }
           payload = (what == "1") ? 'ON' : 'OFF'
           payload == 'ON' ? node.status({fill: 'yellow', shape: 'dot', text: 'On'}) : node.status({fill: 'grey', shape: 'dot', text: 'Off'})
-          //node.send({payload: payload, topic: 'state/' + config.topic})
+          msg2={payload : {On:false}, topic: 'state/' + config.topic}
+          if (payload=='ON') msg2.payload.On = true  
+          node.send([{payload: payload, topic: 'state/' + config.topic}, msg2])
       }
     })
 
