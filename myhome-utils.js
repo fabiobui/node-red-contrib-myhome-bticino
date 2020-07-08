@@ -63,6 +63,8 @@ exports.execute_command = function(handshake, command, config, success, error) {
 
   client.on('close', function() {
     // to verify that no connections are left open
+    if(client !== undefined)
+        client.destroy()
     return
   })
 }

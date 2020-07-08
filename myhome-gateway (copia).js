@@ -17,40 +17,56 @@ module.exports = function(RED) {
     node.host = config.host
     node.port = config.port
     node.pass = config.pass
-    node.timeout = parseInt(config.timeout) || 30
+    node.timeout = parseInt(config.timeout) || 0
     node.time
+    node.last_packet_timeout = undefined
     node.setMaxListeners(100)
 
     node.status({fill: "red", shape: "dot", text: state})
 
-    node.client = new net.Socket()
+
+    node.on ('close', function() {
+      node.log('node close called')
+      close()
+      clearTimeout(node.last_packet_timeout)
+    })
+
+    function instanciateClient() {
+      node.log("instanciate client")
+      node.client = new net.Socket()
 
       node.client.on('error', function() {
         node.error("Gateway socket error")
         state = 'disconnected'
         //  propably the reason for the timeout issue?
-        if(node.client !== undefined)
-          node.client.destroy()
-        instanciateClient()
+        // node.client.end()
+        // node.client.destroy()
+        if(node.last_packet_timeout !== undefined)
+          clearTimeout(node.last_packet_timeout)
+        node.log('clearTimeout3')
+        if (node.timeout != 0) {
+          node.last_packet_timeout = setTimeout(check_connection, (node.timeout+5)*1000)
+          node.log('setTimeout3')
+        }
       })
 
       node.client.on('data', function(data) {
         if(data === undefined) return
+        clearTimeout(node.last_packet_timeout)
         parsePacket(data)
+        if (node.timeout != 0) {
+          node.last_packet_timeout = setTimeout(check_connection, (node.timeout+5)*1000)
+          // node.log('reset connection timeout to ' + (node.timeout+5) + ' seconds.')
+        }
       })
 
       node.client.on('close', function() {
         node.error('IP connection closed')
-        close()
-        instanciateClient()
+        if (node.timeout != 0) {
+          node.last_packet_timeout = setTimeout(check_connection, (node.timeout+5)*1000)
+          // node.log('reset connection timeout to ' + (node.timeout+5) + ' seconds.')
+        }
       })
-
-
-    function instanciateClient() {
-      node.log("instanciate client")
-      
-      if (node.client === undefined)
-          node.client = new net.Socket()
 
       node.client.connect(node.port, node.host, function() {
         node.status({fill:"yellow",shape:"ring",text:"connecting"})
@@ -58,6 +74,10 @@ module.exports = function(RED) {
         node.log('start monitoring')
         node.client.write(START_MONITOR)
         node.log('started monitoring')
+        if (node.timeout != 0) {
+          node.last_packet_timeout = setTimeout(check_connection, (node.timeout+5)*1000)
+          node.log('setTimeout2')
+        }
       })
     }
     
@@ -123,13 +143,27 @@ module.exports = function(RED) {
     }
 
     function check_connection() {
-      node.log("checking connection")      
-      node.client.write(START_MONITOR)    
+      node.log("checking connection")
+      // it was '*#13**0##'
+      mhutils.execute_command(true, '*99*1##', node,
+              function(data) {
+                node.log('connected to gateway')
+                if (state == 'disconnected')
+                  instanciateClient()
+              }, function(data) {
+                node.error('failed requesting time. connection seems broken. Reconnecting to gateway.' )
+                close()
+                instanciateClient()
+              })
     }
     
+    function forced_checking() {
+	   node.log("forced checking connection")
+	   check_connection()
+	}
 
     instanciateClient()
-    setInterval(check_connection, (node.timeout)*1000);
+    setInterval(forced_checking, (node.timeout+5)*1000);
   }
 
   RED.nodes.registerType("myhome-gateway", MyHomeGatewayNode);

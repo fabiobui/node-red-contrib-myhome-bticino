@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-myhome-bticino",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Collection of nodes for the BTicino MyHome system using OpenWebNet.",
   "main": "index.js",
   "scripts": {
