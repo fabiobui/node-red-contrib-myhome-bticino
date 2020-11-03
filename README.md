@@ -7,6 +7,9 @@ Control Bticino MyHome&#8482; components from NodeRED.
 node-red-contrib-myhome-bticino is a Node-RED nodes pack to interact with Bticino MyHome&#8482; devices with [OpenWebNet](https://en.wikipedia.org/wiki/OpenWebNet) protocol through a supported gateway (in my case I use unexpensive MH201 Gateway). 
 Based on unpublished (into NPM repository, but it's on GitHub) work of Ralph Vigne: [https://github.com/vigne/node-red-bticino-myhome](https://github.com/vigne/node-red-bticino-myhome)
 
+## Bug & Fix
+On november 2020 I developed the password (and no password) management (versions > 0.2.1) 
+
 ## Nodes that are now working
 - **Switches**
 	-- ON/OFF
@@ -65,7 +68,7 @@ Test the Switch injecting payload string message 'ON' (or 'OFF') and setting Top
 
 #### How to discover device
 
- 1. Put `Listen Node` connect to a `Debug Node` on your flow
+ 1. Put `myhome-eventsession Node` connect to a `Debug Node` on your flow
  2. Deploy the project and open `Debug messages window`
  3. Click on the switch that you want to know the number
  4. Watch at debug window to see the right message generated  
