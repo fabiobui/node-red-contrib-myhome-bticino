@@ -17,8 +17,12 @@ module.exports = function(RED) {
 
     node.on('input', function(msg) {
 	  var command = msg.payload	
-		
-      mhutils.execute_command(true, command, RED.nodes.getNode(config.gateway),
+	  
+	  var handshake = false
+      if(gateway.pass !== null && gateway.pass !== '') {
+		handshake = true
+	  }		
+      mhutils.execute_command(handshake, command, gateway,
         function(data) {
           // updating node state
           node.send({payload: command, topic: 'state/' + config.topic})

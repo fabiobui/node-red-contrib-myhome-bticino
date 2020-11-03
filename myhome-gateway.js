@@ -80,9 +80,11 @@ module.exports = function(RED) {
                 if (mm==undefined) break
                 state = 'logged-in'
 				//node.log('mm '+mm[1])
-				var res = '*#' + mhutils.calcPass("12345", mm[1].toString()) + '##'
+				if(node.pass !== null && node.pass !== '') {
+			      var res = '*#' + mhutils.calcPass(node.pass, mm[1].toString()) + '##'
 				//node.log('passw '+res)
-				node.client.write(res)
+				  node.client.write(res)
+                }
                 node.status({fill:"yellow",shape:"ring",text:"logged-in"})
                 sdata = ''
                 break
