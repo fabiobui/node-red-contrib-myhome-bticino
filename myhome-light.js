@@ -1,6 +1,6 @@
 module.exports = function(RED) {
   let mhutils = require('./myhome-utils')
-
+  
   function MyHomeLightNode(config) {
     RED.nodes.createNode(this,config)
     var node = this,
@@ -53,37 +53,49 @@ module.exports = function(RED) {
         msg = JSON.parse(msg)
       if (typeof(msg.payload) === 'string')
         msg.payload = JSON.parse(msg.payload)
-
+  
       var payload = msg.payload
-
+  
       if (msg.topic === 'cmd/' + config.topic) {
-        if(payload.state) {
-          var command = '*1*' + (payload.state == 'ON' ? 1 : 0) + '*' + config.lightid + '##'
+        var cmd_what = "";
+        if (payload.state) {
+          if (payload.state == 'OFF') {
+            // turning OFF is the same for all lights (dimmed or not)
+            cmd_what = "0";
+          } else if (payload.state == 'ON') {
+            if(payload.brightness) {
+              // Brightness is provided in %, convert it to WHAT command (from min 2 (20%) to max 10 (100%))
+              var requested_brightness = Math.round(parseInt(payload.brightness)/10);
+              if (requested_brightness < 2) {
+                requested_brightness = 2
+              } else if (requested_brightness > 10) {
+                requested_brightness = 10
+              }
+              cmd_what = requested_brightness.toString();
+            } else {
+              // No brightness provided : is a simple 'ON' call
+              cmd_what = "1";
+            }
+              
+          }
+        }
+            
+        if (cmd_what) {
+          var command = '*1*' + cmd_what + '*' + config.lightid + '##'
           var handshake = false
           if(gateway.pass !== null && gateway.pass !== '') {
-			handshake = true
-		  }
+            handshake = true
+          }
           mhutils.execute_command(handshake, command, gateway,
           function(data) {
             // updating node state
-            // payload.state == 'ON' ? node.status({fill: 'yellow', shape: 'dot', text: 'On'}) : node.status({fill: 'grey', shape: 'dot', text: 'Off'})
-            node.send({payload: {'state': payload.state}, topic: 'state/' + config.topic})
+            if (requested_brightness) {
+              node.send({payload: {'state': payload.state, 'brightness': requested_brightness}, topic: 'state/' + config.topic})
+            } else {
+              node.send({payload: {'state': payload.state}, topic: 'state/' + config.topic})                
+            }
           }, function(data) {
             node.error('command failed' + command)
-            node.status({fill: 'red', shape: 'dot', text: 'command failed: ' + command})
-          })
-        }
-
-        if(payload.brightness) {
-          var requested_brightness = parseInt(payload.brightness),
-              command = '*#1*' + config.lightid + '*#1*' + (requested_brightness+100) + '*255##'
-
-          mhutils.execute_command(command, RED.nodes.getNode(config.gateway),
-          function(data) {
-            node.send({payload: {'state': payload.state, 'brightness': requested_brightness}, topic: 'state/' + config.topic})
-            // node.status({fill: 'yellow', shape: 'dot', text: 'On (' + requested_brightness + '%)'})
-          }, function() {
-            node.error('command failed: ' + command)
             node.status({fill: 'red', shape: 'dot', text: 'command failed: ' + command})
           })
         }
