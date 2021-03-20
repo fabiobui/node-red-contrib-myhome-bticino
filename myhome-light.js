@@ -11,17 +11,17 @@ module.exports = function(RED) {
       var payload = {}
 
       // check if message is a status update
-      if(new RegExp('\\*1\\*(\\d+)\\*(' + config.lightid + '|0)##').test(packet) || // simple light status
-         new RegExp('\\*#1\\*' + config.lightid + '\\*1\\*(\\d+)\\*(\\d+)##').test(packet)) {  // dimmer updates
+      if(new RegExp('^\\*1\\*(\\d+)\\*(' + config.lightid + '|0)##').test(packet) || // simple light status
+         new RegExp('^\\*#1\\*' + config.lightid + '\\*1\\*(\\d+)\\*(\\d+)##').test(packet)) {  // dimmer updates
 
         if(packet[1] == '#') {
-          var m = packet.match('\\*#1\\*' + config.lightid + '\\*1\\*(\\d+)\\*4##'),
+          var m = packet.match('^\\*#1\\*' + config.lightid + '\\*1\\*(\\d+)\\*4##'),
               what = parseInt(m[1])
 
           payload.state = 'ON'
           payload.brightness = (what - 100)
         } else {
-          var m = packet.match('\\*1\\*(\\d+)\\*(' + config.lightid + '|0)##'),
+          var m = packet.match('^\\*1\\*(\\d+)\\*(' + config.lightid + '|0)##'),
               what = parseInt(m[1])
 
           if((what == 0) || (what == 1)) {
