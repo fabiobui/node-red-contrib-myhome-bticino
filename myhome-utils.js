@@ -58,7 +58,6 @@ exports.execute_command = function(handshake, command, config, success, error) {
         } else {
           state == 'command-acknowledged';
           // Calling callback in success mode
-          console.warn("Results collected (" + cmd_results.length + ") : " + cmd_results.toString());
           success(sdata, command , cmd_results);
         }
       }
