@@ -11,8 +11,8 @@ module.exports = function(RED) {
       var payload = ''
 
       // check if message is a status update
-      if(new RegExp('\\*1\\*(\\d+)\\*(' + config.switchid + '|0)##').test(packet)) {
-          var m = packet.match('\\*1\\*(\\d+)\\*(' + config.switchid + '|0)##'),
+      if(new RegExp('^\\*1\\*(\\d+)\\*(' + config.switchid + '|0)##').test(packet)) {
+          var m = packet.match('^\\*1\\*(\\d+)\\*(' + config.switchid + '|0)##'),
               what = parseInt(m[1])
           if (m == undefined) {
             node.error('failed parsing OWN packet: ' + packet)
