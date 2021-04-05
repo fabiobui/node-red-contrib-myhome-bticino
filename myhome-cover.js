@@ -11,17 +11,17 @@ module.exports = function(RED) {
       var payload = {}
 
       // check if message is a status update
-      if(new RegExp('\\*2\\*0\\*(' + config.coverid + '|0)##').test(packet)) {  // stopped
+      if(new RegExp('^\\*2\\*0\\*(' + config.coverid + '|0)##').test(packet)) {  // stopped
         node.status({fill: 'yellow', shape: 'dot', text: 'STOP'})
         // node.send({payload: "STOP", topic: 'state/' + config.topic})
         return
       }
-      if(new RegExp('\\*2\\*1\\*(' + config.coverid + '|0)##').test(packet)) {  // stopped
+      if(new RegExp('^\\*2\\*1\\*(' + config.coverid + '|0)##').test(packet)) {  // stopped
         node.status({fill: 'yellow', shape: 'dot', text: 'OPEN'})
         node.send({payload: "open", topic: 'state/' + config.topic})
         return
       }
-      if(new RegExp('\\*2\\*2\\*(' + config.coverid + '|0)##').test(packet)) {  // stopped
+      if(new RegExp('^\\*2\\*2\\*(' + config.coverid + '|0)##').test(packet)) {  // stopped
         node.status({fill: 'yellow', shape: 'dot', text: 'CLOSE'})
         node.send({payload: "closed", topic: 'state/' + config.topic})
         return
